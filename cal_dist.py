@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 22 12:33:00 2019
-
-@author: boyanglyu
-"""
 
 import numpy as np
 from numpy.linalg import inv
 from scipy.linalg import sqrtm
-
-
+from scipy.linalg import logm
+from scipy.linalg import expm
 from numpy import linalg as LA
 
 np.set_printoptions(threshold=1000000)
-
+import ot
 
 import statsmodels.stats.correlation_tools
 
@@ -24,6 +19,23 @@ def is_pos_def(x):
     else:
         print(np.linalg.eigvals(x))
         return False
+
+# this can be used as distance between power spectral density, a and b are power spectral density
+# def hellinger_1(a, b):
+#     add_part = np.trace(a + b)
+#     mul_part = 2 * np.trace(sqrtm(a) @ sqrtm(b))
+    
+#     if add_part - mul_part < 0:
+#         return 0
+#     return np.sqrt(add_part - mul_part)
+
+
+# def hellinger_2(a, b):
+#     add_part = np.trace(a + b)
+#     mul_part = 2 * np.trace(sqrtm(a@b)) # np.sqrtm(np.trace(a@b))
+#     if add_part - mul_part < 0:
+#         return 0
+#     return np.sqrt(add_part - mul_part)
 
 
 def hellinger_3(a, b):
@@ -35,6 +47,20 @@ def hellinger_3(a, b):
     return np.sqrt(add_part - mul_part)
 
 
+# def hellinger_4(a, b):
+#     add_part = np.trace(a + b)
+#     mul_part = 2 * np.trace(expm((logm(a) + logm(b)) / 2))
+#     if add_part - mul_part < 0:
+#         return 0
+#     return np.sqrt(add_part - mul_part)
+
+
+# def riemannian_distance(a, b):
+#     eig_val = LA.eigvals(a@inv(b))
+#     res = np.sum(np.log(eig_val)**2)
+#     return res
+
+
 def cal_mean(x, y):
     mean_x = np.mean(x,axis=1, keepdims = True)
     mean_y = np.mean(y,axis=1, keepdims = True)
@@ -43,6 +69,7 @@ def cal_mean(x, y):
     return np.sqrt(np.sum(np.square(mean_diff)))
  
 
+# cal_norm_mean or cal_mean
 def distance_mean_mat(data, window):
 
     x = data
@@ -76,11 +103,11 @@ def cal_cov(x, y, method, threshold):
         distance = hellinger_1(cov_x, cov_y)
     elif method == 2:
         distance = hellinger_2(cov_x, cov_y)
-    elif method ==3:
+    elif method == 3:
         distance = hellinger_3(cov_x, cov_y)
-    elif method ==4:
+    elif method == 4:
         distance = hellinger_4(cov_x, cov_y)
-    elif method ==5:
+    elif method == 5:
         distance = riemannian_distance(cov_x, cov_y)
     return np.linalg.norm(distance)
     
@@ -101,4 +128,5 @@ def distance_cov_mat(data, window, method, threshold):
             cov_mat[i,j] = cov 
     
     return cov_mat
+
 
