@@ -5,22 +5,21 @@
 import numpy as np
 
 import os
-import cal_dists
+import cal_dist
 import util_nirs
 from scipy.io import loadmat
 import ot
 import multiprocessing
 from functools import partial
-from itertools import combinations 
 
 
-group_num = '1'
+group_num = '4'
 test = '/home/boyang/AF/fnirs/' + group_num
 sava_path = '/home/boyang/AF/alignment/new_distance/' + group_num + '/'
 cleaned_file_path = '/home/boyang/AF/fnirs_new/'+ group_num +'_cl'
 res_path = '/home/boyang/AF/alignment/clean_code/session_result/' + group_num + '/'
 prefix = os.listdir(test)
-total_files = 3
+total_files = 4
 
 if '.DS_Store' in prefix:
     prefix.remove('.DS_Store')
@@ -115,7 +114,6 @@ def get_color(fnirs_path, time_path):
 
 def evalutaion(couple_mat, color_1, color_2):
     correct = 0
-    wrong = 0
     count = {0:0,1:0, 2:0,3:0}
     print('couple_mat shape is ', couple_mat.shape)
     print('color 1 shape is ', color_1.shape)
@@ -187,29 +185,23 @@ for i in range(total_files):
     shape_list.append(temp.shape[0])
     task_list.append(temp)
 print(shape_list)
-#for 2 subject
-# save_mean_dist(task_list, window_size)
-# save_cov_dist(task_list[0], task_list[1], task_list[2],task_list[2],  window_size, 3, 1e-13)
 
+# for subjects with 3 sessions
+#save_cov_dist(task_list[0], task_list[1], task_list[2],task_list[2],  window_size, 3, 1e-13)
+# for subjects with 4 sessions
 save_cov_dist(task_list[0], task_list[1], task_list[2], task_list[3], window_size, 3, 1e-14)
 save_mean_dist(task_list, window_size)
 
-
-
+# sub 1: 0.01, sub 3: 0.005, sub 2: 0.002, sub 4: 0.002, sub 5: 0.0006, sub 6: 0.001
 eps_list = [0.002]
 
 for ele in eps_list:
     acc, all_pred_list = sess_by_sess(shape_list, comb, ele)
     avg_acc = np.average(acc)
     
-    std = np.std(acc)
     with open(res_path + 'accuracy_avg_' + group_num + '.txt', 'a+') as f:
         f.write(str(shape_list)+ '\n')
         f.write('all prediction is ' + str(all_pred_list)+ '\n')
         f.write('average acc is ' + str(avg_acc)+ '\n')
-        f.write('std is ' + str(std)+ '\n')
         
-
-
-
-
+        
