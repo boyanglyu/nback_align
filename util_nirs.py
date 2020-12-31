@@ -1,6 +1,3 @@
-'''
-This is for 
-'''
 
 import pandas as pd
 
@@ -137,6 +134,3 @@ def generate_color(window, label):
 
 
 
-
-
-      
