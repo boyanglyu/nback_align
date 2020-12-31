@@ -1,22 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 24 22:48:32 2019
-
-@author: boyanglyu
-"""
-
 
 import numpy as np
-from numpy.linalg import matrix_rank
+
 import os
 import cal_dist
 import util_nirs
 from scipy.io import loadmat
 import ot
-import multiprocessing
-from functools import partial
-from itertools import combinations 
 
 
 
@@ -93,9 +84,13 @@ def get_task_data(fnirs_path, time_path, clean_path):
     return color,task_data.shape[0]
 
 
-#1:0.45 2, 2: 0.45 3, 3: 0.5,1.5, 6: alpha 0.6 times 4, 8:0.4, 1, 9: 0.6,5
 
-
+# sub 1: alpha 0.45 times 3, 
+# sub 2: alpha 0.5, times 1.5 
+# sub 3: alpha 0.6, times 4
+# sub 4: alpha 0.4, times 1
+# sbu 5: alpha 0.6, times 5 
+# sub 6: alpha 0.45 times 2
 window_size = 60
 total_files = 4
 times = 5
