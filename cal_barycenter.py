@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Created on Thu Oct 24 22:48:32 2019
+
+@author: boyanglyu
+"""
+
 
 import numpy as np
 
 import os
-import cal_dist
 import util_nirs
 from scipy.io import loadmat
 import ot
 
 
 
-group_num = '9'
+group_num = '5'
 test = '/home/boyang/AF/fnirs/' + group_num
 save_path = '/home/boyang/AF/alignment/new_distance/' + group_num + '/' # norm
 
@@ -110,11 +115,4 @@ print(X)
 
 np.save(result_path + 'subject_' + group_num + '_times'+ str(times) + '_barycenter_feature.npy', X)
 np.save(result_path + 'subject_' + group_num + '_times'+ str(times) + '_barycenter.npy', Cs)
-
-
-
-
-
-
-
 
