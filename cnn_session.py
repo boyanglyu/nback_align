@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat May 18 16:57:39 2019
 
-@author: boyanglyu
-"""
 
 import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torch.optim as optim
-
-
-
 
 np.set_printoptions(threshold=1000)
 device = "cuda" if torch.cuda.is_available() else "cpu"
