@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 24 22:48:32 2019
 
-@author: boyanglyu
-"""
 
 
 import numpy as np
-
 import os
 import util_nirs
 from scipy.io import loadmat
