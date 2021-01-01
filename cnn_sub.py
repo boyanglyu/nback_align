@@ -1,16 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat May 18 16:57:39 2019
-
-@author: boyanglyu
-"""
 
 import numpy as np
-
-#import seaborn as sns
-
-
 import torch
 from torch import nn
 from torch.nn import functional as F
