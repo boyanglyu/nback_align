@@ -1,33 +1,27 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 24 22:48:32 2019
-
-@author: boyanglyu
-Using gromov-wasserstein to find coupling between distance matrices of two session data.
-"""
-
 
 import numpy as np
-from numpy.linalg import matrix_rank
 import os
-import cal_dist
+
 import util_nirs
 from scipy.io import loadmat
 import ot
-import multiprocessing
-from functools import partial
-from itertools import combinations 
 
 
-# 2: 0.45 3, 3: 0.5,1.5, 6: alpha 0.6 times 4, 8:0.4, 1, 9: 0.6,5
-group_num_1 = '9'
-group_num_2 = '3'
-times = 5
+
+# sub 1: alpha 0.45 times 3, 
+# sub 2: alpha 0.5, times 1.5 
+# sub 3: alpha 0.6, times 4
+# sub 4: alpha 0.4, times 1
+# sbu 5: alpha 0.6, times 5 
+# sub 6: alpha 0.45 times 2
+# group_num_1  is source group, group_num_2 is the target group
+group_num_1 = '6'
+group_num_2 = '5'
+times = 2
 
 total_files = 4
 sess_dist = 'cov'
-window_size = 59
+window_size = 60 # window size is 60 for all subjects except for subject 2
 
 test_2 = '/home/boyang/AF/fnirs/' + group_num_2
 res_file = '/home/boyang/AF/alignment/clean_code/subject_result/'
@@ -35,28 +29,13 @@ bary_path = '/home/boyang/AF/alignment/clean_code/barycenter_folder/'
 save_path_2 = '/home/boyang/AF/alignment/new_distance/' + group_num_2 + '/'
 prefix_2 = os.listdir(test_2)
 
-comb = [0,1,2,3] # 3
-eps_list = [0.0016]
+comb = [0,1,2,3] 
+eps_list = np.around(np.arange(0.001,0.0031, 0.0001), 4)
 
 if '.DS_Store' in prefix_2:
     prefix_2.remove('.DS_Store')
-    
-     
-remove_list_2 = []
-for ele in prefix_2:
-    if '.png' in ele:
-        remove_list_2.append(ele)
-    if 'remove' in ele:
-        remove_list_2.append(ele) 
-    if '190604_120802' in ele:# subject 2
-        remove_list_2.append(ele)
-    if '190530_143148' in ele: # subject 6 
-        remove_list_2.append(ele)
-    if '190515_154622' in ele: # subject 1
-        remove_list.append(ele)
 
         
-prefix_2 = [x for x in prefix_2 if x not in remove_list_2]
 fnirs_path_2 = [test_2+'/'+ele+'/'+ele+'_NIRSdata.csv' for ele in prefix_2]
 time_path_2 = [test_2+'/'+ele+'/'+ele+'_STIMdata.csv' for ele in prefix_2]
 
@@ -96,7 +75,6 @@ def get_color(fnirs_path, time_path):
 
 def evalutaion(couple_mat, color_1, color_2):
     correct = 0
-    wrong = 0
     count = {0:0,1:0, 2:0,3:0}
 
     pred_color = np.matmul(couple_mat,color_1)
