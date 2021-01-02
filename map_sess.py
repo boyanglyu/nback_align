@@ -192,8 +192,7 @@ print(shape_list)
 save_cov_dist(task_list[0], task_list[1], task_list[2], task_list[3], window_size, 3, 1e-14)
 save_mean_dist(task_list, window_size)
 
-# sub 1: 0.01, sub 3: 0.005, sub 2: 0.002, sub 4: 0.002, sub 5: 0.0006, sub 6: 0.001
-eps_list = [0.002]
+eps_list = np.append(np.around(np.arange(0.0005,0.001, 0.0001), 4),np.around(np.arange(0.001,0.011, 0.001), 4))
 
 for ele in eps_list:
     acc, all_pred_list = sess_by_sess(shape_list, comb, ele)
